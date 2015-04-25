@@ -11,14 +11,21 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.facebook.appevents.AppEventsLogger;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.tweetui.TweetUi;
 
 import io.fabric.sdk.android.Fabric;
-
+import michaelusry.com.tcmobile.Fragments.FacebookFragment;
+import michaelusry.com.tcmobile.Fragments.FlickrFragment;
+import michaelusry.com.tcmobile.Fragments.NavigationDrawerFragment;
+import michaelusry.com.tcmobile.Fragments.TCEventsFragment;
+import michaelusry.com.tcmobile.Fragments.TwitterFragment;
+import michaelusry.com.tcmobile.Fragments.VimeoFragment;
 
 
 public class MainActivity extends Activity
@@ -43,7 +50,7 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new Twitter(authConfig),new TweetUi());
 
         setContentView(R.layout.activity_main);
 
@@ -60,11 +67,31 @@ public class MainActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        Fragment sFrag = null;
+
+        switch (position){
+            case 0:
+                sFrag = new FacebookFragment();
+                break;
+            case 1:
+                sFrag = new TwitterFragment();
+                break;
+            case 2:
+                sFrag = new FlickrFragment();
+                break;
+            case 3:
+                sFrag = new VimeoFragment();
+                break;
+            case 4:
+                sFrag = new TCEventsFragment();
+                break;
+
+        }
+
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
-    }
+                .replace(R.id.container, sFrag)
+                .commit();    }
 
     public void onSectionAttached(int number) {
         switch (number) {
@@ -101,13 +128,13 @@ public class MainActivity extends Activity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
+//            getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
     }
-
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -119,7 +146,7 @@ public class MainActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
-
+*/
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -159,5 +186,22 @@ public class MainActivity extends Activity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
+
 
 }

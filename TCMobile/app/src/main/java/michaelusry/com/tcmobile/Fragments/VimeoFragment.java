@@ -1,6 +1,6 @@
 package michaelusry.com.tcmobile.Fragments;
 
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import michaelusry.com.tcmobile.R;
 /**
  * Created by michael on 4/21/15.
  */
-public class VimeoFragment extends Fragment {
+public class VimeoFragment extends ListFragment {
 
     private static final String TAG = "FacebookFragment";
     private String url = "https://vimeo.com/api/v2/tcbroadcast/videos.json";
@@ -24,6 +24,7 @@ public class VimeoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG,"onCreateView");
         //			result.setText(JSON.showJSON(selectedMag));
+        Log.i(TAG,"url: " + url);
 
         Log.i(TAG,"JSON: " + JSON.showJSON(url));
         // display the JSON.showJSON in a list.

@@ -25,7 +25,11 @@ public class JSON {
 //	static String url = "https://vimeo.com/api/v2/tcbroadcast/videos.json";
 
     static String url;
-	public static String showJSON(String url) {
+
+	public static String showJSON(String ur) {
+        Log.i(TAG,"showJSON");
+        Log.i(TAG,"url: " + url);
+        url = ur;
 
 		// declare variables
 		String result = "";
@@ -134,8 +138,10 @@ public class JSON {
 		protected String doInBackground(String... params) {
 
 			// initialize the responseString variable
-            Log.i(TAG,"in getData:..... ");
-			String responseString = "";
+            Log.i(TAG,"getData:..... ");
+            Log.i(TAG,"url: " + url);
+
+            String responseString = "";
 
 			try {
 
