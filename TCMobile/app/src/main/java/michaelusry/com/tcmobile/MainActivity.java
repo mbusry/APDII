@@ -9,12 +9,16 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.appevents.AppEventsLogger;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.tweetui.TweetUi;
@@ -28,12 +32,14 @@ import michaelusry.com.tcmobile.Fragments.TwitterFragment;
 import michaelusry.com.tcmobile.Fragments.VimeoFragment;
 
 
+
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "nUycVv2dyU6qYLVohfN2Al01h";
     private static final String TWITTER_SECRET = "VqGOASBDwhfXPgAxVTEhWaHBztn1esSzuv9ZHVqlsl39ZZZaS3";
+    private static final String TAG = "MainActivity";
 
 
     /**
@@ -45,10 +51,30 @@ public class MainActivity extends Activity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private CallbackManager callbackManager;
+    private AccessTokenTracker accessTokenTracker;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG,"onCreate");
+
+        //Facebook
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
+                Log.i(TAG,"onCurrentAccessTokenChanged: oldAccessToken: " + oldAccessToken);
+                Log.i(TAG,"onCurrentAccessTokenChanged: currentAccessToken: " + currentAccessToken);
+
+            }
+        };
+
+        //Twitter
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig),new TweetUi());
 
@@ -186,7 +212,7 @@ public class MainActivity extends Activity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
-
+/*
     @Override
     protected void onResume() {
         super.onResume();
@@ -202,6 +228,6 @@ public class MainActivity extends Activity
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
     }
-
+*/
 
 }

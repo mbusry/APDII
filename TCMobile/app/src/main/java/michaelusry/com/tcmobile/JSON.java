@@ -7,8 +7,6 @@ package michaelusry.com.tcmobile;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,16 +29,6 @@ public class JSON {
         Log.i(TAG,"url: " + url);
         url = ur;
 
-		// declare variables
-		String result = "";
-		String subResult = "";
-		String jsonTitle, jsonThumb;
-
-		StringBuilder resultSB = new StringBuilder();
-
-
-		// container array
-		JSONArray jsonContainerArray = new JSONArray();
 
 		try {
 			// call the JSONParser
@@ -50,41 +38,8 @@ public class JSON {
 			jsonResult = data.execute(url).get();
 			Log.i(TAG,"jsonResult: " + jsonResult);
 
-            /*
-			// create container array from jsonResult
-			jsonContainerArray = new JSONArray(jsonResult);
-            Log.i(TAG,"jsonContainerArray: " + jsonContainerArray);
-            Log.i(TAG,"length: " + jsonContainerArray.length());
-
-			// **************************
-			// depending on selection loop through, set variables, add to
-			// string[] and return;
-
-				for (int i = 1; i < jsonContainerArray.length(); i++) {
-					JSONObject jco = jsonContainerArray.getJSONObject(i);
-					// get info
-					jsonThumb = jco.getString("thumbnail_small");
-					jsonTitle = jco.getString("title");
-
-					subResult = "Thumb: " + jsonThumb + "\nTitle: " + jsonTitle
-							+ "\n\n";
-//                    Log.i(TAG,"subResult: " + subResult);
-
-					resultSB.append(subResult);
-
-                    Log.i(TAG,"StringBuilder: " + resultSB.toString());
-
-					result = resultSB.toString();
-
-				}
-				*/
 
 		}
-        /*
-        catch (JSONException e) {
-			e.printStackTrace();
-		}
-        */
         catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
