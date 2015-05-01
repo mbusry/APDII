@@ -5,12 +5,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="flickr"
-        android:textColor="#ffff0000"
-        android:textSize="45dp"/>
-
+    <ListView android:id="@+id/flickr_listView"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:divider="@android:color/darker_gray"
+              android:dividerHeight="3dp"
+              android:drawSelectorOnTop="false"/>
 
 </LinearLayout>

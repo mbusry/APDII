@@ -21,6 +21,7 @@ public class VimeoVideoFragment extends Activity {
 
         vv = (VideoView) findViewById(R.id.vimeo_VideoView);
 
+
        /*
         try {
             // Start the MediaController

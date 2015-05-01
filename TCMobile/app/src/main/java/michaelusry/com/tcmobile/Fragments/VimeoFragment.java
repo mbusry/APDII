@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -30,6 +31,8 @@ public class VimeoFragment extends Fragment {
     private JSONArray loadedJSonArray;
     String dataString;
     private ArrayList<String> vids;
+//    private SitesAdapter mAdapter;
+
 
 
     @Override
@@ -39,6 +42,19 @@ public class VimeoFragment extends Fragment {
         Log.i(TAG,"onCreateView");
         Log.i(TAG,"url: " + url);
         lv = (ListView) getView().findViewById(R.id.vimeo_listView);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.i(TAG,"onItemClick: " + position);
+//                String url = mAdapter.getItem(position).getLink();
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+//                startActivity(i);
+
+            }
+        });
 
 
         // display the JSON.showJSON in a list.

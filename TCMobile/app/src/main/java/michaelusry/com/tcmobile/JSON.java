@@ -36,7 +36,7 @@ public class JSON {
 
 			// create string from data to hold JSON
 			jsonResult = data.execute(url).get();
-			Log.i(TAG,"jsonResult: " + jsonResult);
+//			Log.i(TAG,"Fileread Result: " + jsonResult);
 
 
 		}
