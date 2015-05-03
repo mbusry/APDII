@@ -7,6 +7,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -15,22 +17,17 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
+import java.io.FileNotFoundException;
+
 import io.fabric.sdk.android.Fabric;
-import michaelusry.com.tcmobile.Fragments.FacebookFragment;
-import michaelusry.com.tcmobile.Fragments.FlickrFragment;
 import michaelusry.com.tcmobile.Fragments.NavigationDrawerFragment;
 import michaelusry.com.tcmobile.Fragments.TCEventsFragment;
 import michaelusry.com.tcmobile.Fragments.TwitterFragment;
 import michaelusry.com.tcmobile.Fragments.VimeoFragment;
-
 
 
 public class MainActivity extends Activity
@@ -40,6 +37,9 @@ public class MainActivity extends Activity
     private static final String TWITTER_KEY = "nUycVv2dyU6qYLVohfN2Al01h";
     private static final String TWITTER_SECRET = "VqGOASBDwhfXPgAxVTEhWaHBztn1esSzuv9ZHVqlsl39ZZZaS3";
     private static final String TAG = "MainActivity";
+
+    static String photosetURL = "https://api.flickr.com/services/feeds/photos_public.gne?id=57940508@N07&format=xml";
+    static String testphotosetURL = "https://www.dropbox.com/s/kvibq1uk7qbkfh0/Flickr.xml";
 
 
     /**
@@ -51,8 +51,8 @@ public class MainActivity extends Activity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private CallbackManager callbackManager;
-    private AccessTokenTracker accessTokenTracker;
+//    private CallbackManager callbackManager;
+//    private AccessTokenTracker accessTokenTracker;
 
 
 
@@ -61,6 +61,12 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         Log.i(TAG,"onCreate");
 
+        SitesDownloadTask download = new SitesDownloadTask();
+        download.execute();
+        Log.i(TAG,"back from download");
+
+
+        /*
         //Facebook
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -73,6 +79,7 @@ public class MainActivity extends Activity
 
             }
         };
+        */
 
         //Twitter
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
@@ -97,19 +104,21 @@ public class MainActivity extends Activity
 
         switch (position){
             case 0:
-                sFrag = new FacebookFragment();
-                break;
-            case 1:
                 sFrag = new TwitterFragment();
+                mTitle = "Twitter";
+
                 break;
-            case 2:
-                sFrag = new FlickrFragment();
-                break;
-            case 3:
+
+            case 1:
                 sFrag = new VimeoFragment();
+                mTitle = "Vimeo";
+
                 break;
-            case 4:
+
+            case 2:
                 sFrag = new TCEventsFragment();
+                mTitle = "TC Events";
+
                 break;
 
         }
@@ -127,14 +136,9 @@ public class MainActivity extends Activity
             case 2:
                 mTitle = getString(R.string.title_section2);
                 break;
+
             case 3:
                 mTitle = getString(R.string.title_section3);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_section4);
-                break;
-            case 5:
-                mTitle = getString(R.string.title_section5);
                 break;
 
         }
@@ -229,5 +233,30 @@ public class MainActivity extends Activity
         AppEventsLogger.deactivateApp(this);
     }
 */
+
+    private class SitesDownloadTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            //Download the file
+            try {
+                Downloader.DownloadFromUrl(photosetURL, openFileOutput("Flickr.xml", Context.MODE_PRIVATE));
+                Log.i(TAG,"DOWNLOAD COMPLETE");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+//        @Override
+//        protected void onPostExecute(Void result){
+//            //setup our Adapter and set it to the ListView.
+//            mAdapter = new SitesAdapter(MainActivity.this, -1, SitesXmlPullParser.getStackSitesFromFile(MainActivity.this));
+//            sitesList.setAdapter(mAdapter);
+//            Log.i("StackSites", "adapter size = "+ mAdapter.getCount());
+//        }
+    }
+
 
 }

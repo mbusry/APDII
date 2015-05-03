@@ -43,6 +43,9 @@ dependencies {
         transitive = true;
     }
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile files('libs/universal-image-loader-1.8.2.jar')
+
+
 }
 
 

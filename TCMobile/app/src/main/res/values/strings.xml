@@ -2,11 +2,9 @@
 <resources>
 
     <string name="app_name">TC Mobile</string>
-    <string name="title_section1">Facebook</string>
-    <string name="title_section2">Twitter</string>
-    <string name="title_section3">Flickr</string>
-    <string name="title_section4">Vimeo</string>
-    <string name="title_section5">TC Events</string>
+    <string name="title_section1">Twitter</string>
+    <string name="title_section2">Vimeo</string>
+    <string name="title_section3">TC Events</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -16,22 +14,11 @@
 
     <string-array name="sections">
 
-        <item>Facebook</item>
         <item>Twitter</item>
-        <item>Flickr</item>
         <item>Vimeo</item>
         <item>TC Events</item>
 
     </string-array>
 
-    <string-array name="sections_icons">
-
-        <item>@drawable/facebook</item>
-        <item>@drawable/twitter</item>
-        <item>@drawable/flicker</item>
-        <item>@drawable/vimeo</item>
-        <item>@drawable/tcevents</item>
-
-    </string-array>
 
 </resources>

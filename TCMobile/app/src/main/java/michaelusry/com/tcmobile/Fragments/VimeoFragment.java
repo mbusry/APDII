@@ -1,6 +1,7 @@
 package michaelusry.com.tcmobile.Fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,10 +29,13 @@ public class VimeoFragment extends Fragment {
     private String url = "https://vimeo.com/api/v2/tcbroadcast/videos.json";
     View rv;
     ListView lv = null;
-    private JSONArray loadedJSonArray;
+    JSONArray loadedJSonArray;
     String dataString;
     private ArrayList<String> vids;
-//    private SitesAdapter mAdapter;
+    ArrayList<String> passInfo;
+    JSONObject arrayElement;
+
+    String title;
 
 
 
@@ -78,6 +82,7 @@ public class VimeoFragment extends Fragment {
         return rv;
     }
 
+    /*
     public void updateView() {
         Log.i(TAG, "updateView started");
 
@@ -94,14 +99,18 @@ public class VimeoFragment extends Fragment {
             vids = new ArrayList<String>();
             for (int i = 0; i < loadedJSonArray.length(); i++) {
 
-                String title = null;
+                title = null;
+                url = null;
 
 
                 try {
                     JSONObject json_data = loadedJSonArray.getJSONObject(i);
                     title = json_data.getString("title");
+                    url = json_data.getString("url");
 
                     Log.i(TAG, "title("+i+"): " + title);
+                    Log.i(TAG, "url("+i+"): " + url);
+
 
 
                 } catch (JSONException e) {
@@ -114,8 +123,40 @@ public class VimeoFragment extends Fragment {
             }
 
 
+
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, vids);
             lv.setAdapter(adapter);
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.i(TAG,"onItemClick: " + position);
+
+                    Log.i(TAG,"onItemClick:title: " +title);
+                    Log.i(TAG,"onItemClick:url: " +url);
+
+
+                    //get info to bundle
+
+
+                    Fragment sFrag = null;
+                    sFrag = new VimeoVideoFragment();
+                    Bundle args = new Bundle();
+                    args.putString("url",url);
+                    args.putString("title", title);
+                    sFrag.setArguments(args);
+
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, sFrag)
+                            .addToBackStack(null)
+                            .commit();
+
+
+
+                }
+            });
+
         }
 
         /*
@@ -133,10 +174,100 @@ public class VimeoFragment extends Fragment {
                 return null;
             }
         }
-        */
 
 
     }
+    */
+
+    public void updateView() {
+        Log.i(TAG, "updateView started");
+
+        try {
+            loadedJSonArray = new JSONArray(dataString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (loadedJSonArray.length() > 0) {
+            Log.i(TAG, "loadedJsonArray != null");
+            Log.i(TAG, "loadedJsonArray.length: " + loadedJSonArray.length());
+
+            String fn, ln, dob;
+            vids = new ArrayList<String>();
+            for (int i = 0; i < loadedJSonArray.length(); i++) {
+                String url = null;
+                String title = null;
 
 
-}
+                try {
+                    JSONObject json_data = loadedJSonArray.getJSONObject(i);
+                    title = json_data.getString("title");
+                    url = json_data.getString("url");
+
+                    Log.i(TAG, "title: " + title);
+                    Log.i(TAG, "url: " + url);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                vids.add(title);
+            }
+
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, vids);
+            lv.setAdapter(adapter);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.i(TAG, "onItemClick: " + position);
+//                    Log.i(TAG,"onItemClick: arrayList: " + arrayList);
+
+                    try {
+                        Log.i(TAG, "loadedJSonArray.getString(position): " + loadedJSonArray.getString(position));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        arrayElement = loadedJSonArray.getJSONObject(position);
+                    } catch (JSONException e) {
+                        Log.i(TAG, "Problem getting the object at position: \n");
+                        e.printStackTrace();
+                    }
+                    try {
+                        Log.i(TAG, "title: " + arrayElement.getString("title"));
+                        Log.i(TAG, "url: " + arrayElement.getString("url"));
+
+                        String url = arrayElement.getString("url");
+                        String title = arrayElement.getString("title");
+
+
+                        Fragment sFrag = null;
+                        sFrag = new VimeoVideoFragment();
+                        Bundle args = new Bundle();
+                        args.putString("url",url);
+                        args.putString("title", title);
+                        sFrag.setArguments(args);
+
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, sFrag)
+                                .addToBackStack(null)
+                                .commit();
+
+
+                    } catch (JSONException e) {
+                        Log.i(TAG, "Problem getting the arrayElements: \n");
+
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+    }
+
+
+    }
